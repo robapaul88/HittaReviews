@@ -33,11 +33,11 @@ class ViewUtils {
             } else {
                 for (review in reviews) {
                     reviewsSum += review.rating
-                    reviewsCount += 1
                 }
                 reviewsSum += ownRating?.rating ?: 0
-                reviewsCount += if (ownRating == null) 0 else 1
+                reviewsCount = reviews.size + if (ownRating == null || ownRating.rating == 0) 0 else 1
             }
+            reviewsCount = Math.max(reviewsCount, 1)//prevent division by 0
             reviewsCompanyRating.text = (reviewsSum.toFloat() / reviewsCount).toString()
             reviewsFromRatings!!.text = context.getString(R.string.from_frm_ratings, reviewsCount)
         }

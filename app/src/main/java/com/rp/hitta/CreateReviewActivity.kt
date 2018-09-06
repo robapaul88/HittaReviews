@@ -84,7 +84,7 @@ class CreateReviewActivity : AppCompatActivity() {
     }
 
     private fun showSuccessAlert() {
-        AlertDialog.Builder(this)
+        AlertDialog.Builder(this, R.style.AlertDialogTheme)
                 .setTitle(getString(R.string.alert_title))
                 .setMessage(getString(R.string.alert_message))
                 .setPositiveButton(getString(R.string.alert_button_text)) { _, _ -> finish() }
