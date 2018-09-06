@@ -1,16 +1,15 @@
 package com.rp.hitta
 
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.rp.hitta.api.ReviewsViewModel
-import kotlinx.android.synthetic.main.activity_main.*
-import android.arch.lifecycle.ViewModelProviders
-import android.support.annotation.Nullable
 import com.rp.hitta.model.Review
-import java.util.*
-
+import com.rp.hitta.ui.ReviewsAdapter
+import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * Created by roba
@@ -25,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private val reviewsViewModel: ReviewsViewModel? = null
+    private lateinit var reviewsViewModel: ReviewsViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,19 +32,12 @@ class MainActivity : AppCompatActivity() {
         val companyName = intent.getStringExtra(KEY_COMPANY_NAME)
         companyName?.let { company_name.text = it }
 
+        val adapter = ReviewsAdapter()
+        reviewsRecyclerView.adapter = adapter
+
         reviewsViewModel = ViewModelProviders.of(this).get(ReviewsViewModel::class.java)
-        initAdapter()
-        reviewsViewModel.getReviewsList().observe(this, object : Observer<List<Review>>() {
-            fun onChanged(@Nullable directors: List<Review>) {
-                //TODO refresh adapter
-            }
+        reviewsViewModel.getReviewsList().observe(this, Observer<List<Review>> {
+            adapter.updateReviews(it)
         })
-        initSwipeToRefresh()
-    }
-
-    private fun initAdapter() {
-    }
-
-    private fun initSwipeToRefresh() {
     }
 }

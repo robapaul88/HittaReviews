@@ -5,8 +5,8 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.rp.hitta.model.Review
 import com.rp.hitta.mock.MockData
+import com.rp.hitta.model.Review
 import java.util.concurrent.Executors
 
 /**
@@ -16,19 +16,28 @@ import java.util.concurrent.Executors
 abstract class ReviewsDatabase : RoomDatabase() {
     abstract fun reviewsDao(): ReviewsDao
 
-    companion object : SingletonHolder<ReviewsDatabase, Context>({
-        Room.databaseBuilder(it.applicationContext, ReviewsDatabase::class.java, "hitta_reviews.db")
-                .allowMainThreadQueries()
-                .addCallback(object : RoomDatabase.Callback() {
-                    override fun onCreate(db: SupportSQLiteDatabase) {
-                        super.onCreate(db)
-                        Executors.newSingleThreadScheduledExecutor().execute {
-                            for (review in MockData.getMockReviews()) {
-                                ReviewsDatabase.getInstance(it).reviewsDao().insertReview(review)
-                            }
-                        }
-                    }
-                })
-                .build()
-    })
+    companion object {
+        private var INSTANCE: ReviewsDatabase? = null
+
+        fun getInstance(context: Context): ReviewsDatabase? {
+            if (INSTANCE == null) {
+                synchronized(ReviewsDatabase::class) {
+                    INSTANCE = Room.databaseBuilder(context.applicationContext, ReviewsDatabase::class.java, "hitta_reviews.db")
+                            .allowMainThreadQueries()
+                            .addCallback(object : RoomDatabase.Callback() {
+                                override fun onCreate(db: SupportSQLiteDatabase) {
+                                    super.onCreate(db)
+                                    Executors.newSingleThreadScheduledExecutor().execute {
+                                        for (review in MockData.getInitialReviews()) {
+                                            ReviewsDatabase.getInstance(context)?.reviewsDao()?.insertReview(review)
+                                        }
+                                    }
+                                }
+                            })
+                            .build()
+                }
+            }
+            return INSTANCE
+        }
+    }
 }

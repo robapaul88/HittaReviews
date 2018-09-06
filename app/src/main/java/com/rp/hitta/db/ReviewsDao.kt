@@ -12,6 +12,9 @@ interface ReviewsDao {
     @Query("SELECT * FROM review")
     fun getAllReviews(): LiveData<List<Review>>
 
+    @Query("SELECT * FROM review WHERE isCurrentUser == 1")
+    fun getOwnReview(): Review?
+
     @Insert
     fun insertReview(review: Review)
 }

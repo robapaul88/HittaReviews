@@ -8,14 +8,14 @@ import android.arch.persistence.room.PrimaryKey
  * Created by roba
  */
 @Entity
-class Review(private var name: String?, avatar: String?, createdAt: Long = 0, rating: Int = 0, source: String?, content: String?) {
+class Review(val userName: String?,
+             val avatar: String?,
+             @ColumnInfo(name = "created_at")
+             val createdAt: Long = 0,
+             val rating: Int = 0,
+             val source: String?,
+             val content: String?,
+             val isCurrentUser: Int? = 0) {
     @PrimaryKey(autoGenerate = true)
-    private val id: Int = 0
-
-    private val avatar: String? = null
-    @ColumnInfo(name = "created_at")
-    private val createdAt: Long = 0
-    private val rating: Int = 0
-    private val source: String? = null
-    private val content: String? = null
+    val id: Int = 0
 }
