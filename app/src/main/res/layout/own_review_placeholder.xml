@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/ownIcon"
         android:layout_width="@dimen/user_icon_size"
         android:layout_height="@dimen/user_icon_size"
+        android:layout_marginEnd="@dimen/default_margin"
+        android:layout_marginTop="@dimen/default_margin"
         android:contentDescription="@null"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_account_unknown" />
 
     <LinearLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
-        android:orientation="vertical"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/review_user_icon"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginTop="@dimen/default_margin"
+        android:layout_toEndOf="@id/ownIcon"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
@@ -47,9 +47,10 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/bottom_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_below="@id/container"
         android:layout_marginTop="@dimen/default_margin"
-        android:background="@color/hitta_grey"
-        app:layout_constraintBottom_toBottomOf="parent" />
-</android.support.design.widget.CoordinatorLayout>
+        android:background="@color/hitta_grey" />
+</RelativeLayout>
