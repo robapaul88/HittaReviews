@@ -24,7 +24,7 @@ class ViewUtils {
         fun updateCompanyStats(reviewsCompanyRating: TextView?, reviewsFromRatings: TextView?, reviews: List<Review>?) {
             val context = reviewsCompanyRating!!.context
             var reviewsSum = 0
-            var reviewsCount = 0
+            var reviewsCount: Int
             val ownRating = ReviewsDatabase.getInstance(context).reviewsDao().getOwnReview()
 
             if (reviews == null || reviews.isEmpty()) {
