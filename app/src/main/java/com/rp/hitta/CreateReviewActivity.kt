@@ -9,6 +9,7 @@ import android.text.TextUtils
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.RatingBar
+import com.rp.hitta.api.HittaSandbox
 import com.rp.hitta.db.ReviewsDatabase
 import kotlinx.android.synthetic.main.create_review_layout.*
 
@@ -69,6 +70,7 @@ class CreateReviewActivity : AppCompatActivity() {
                         ownReview.createdAt = System.currentTimeMillis()
                         ownReview.rating = createReviewRating.rating.toInt()
                         ReviewsDatabase.getInstance(this@CreateReviewActivity).reviewsDao().updateReview(ownReview)
+                        HittaSandbox.persistReview(ownReview)
                     }
                     showSuccessAlert()
                 }

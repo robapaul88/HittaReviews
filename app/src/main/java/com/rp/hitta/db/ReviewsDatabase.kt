@@ -5,6 +5,7 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
+import com.rp.hitta.api.HittaSandbox
 import com.rp.hitta.init.Initializer
 import com.rp.hitta.model.Review
 import java.util.concurrent.Executors
@@ -30,6 +31,7 @@ abstract class ReviewsDatabase : RoomDatabase() {
                                 Executors.newSingleThreadScheduledExecutor().execute {
                                     for (review in Initializer.getInitialReviews()) {
                                         ReviewsDatabase.getInstance(context).reviewsDao().insertReview(review)
+                                        HittaSandbox.persistReview(review)
                                     }
                                 }
                             }
