@@ -63,15 +63,7 @@ class CreateReviewActivity : AppCompatActivity() {
         when (item!!.itemId) {
             R.id.save_review -> {
                 if (isValidReview()) {
-                    val ownReview = ReviewsDatabase.getInstance(this@CreateReviewActivity).reviewsDao().getOwnReview()
-                    ownReview?.let {
-                        ownReview.userName = createReviewOwnName.text.toString()
-                        ownReview.content = createReviewOwnContent.text.toString()
-                        ownReview.createdAt = System.currentTimeMillis()
-                        ownReview.rating = createReviewRating.rating.toInt()
-                        ReviewsDatabase.getInstance(this@CreateReviewActivity).reviewsDao().updateReview(ownReview)
-                        HittaSandbox.persistReview(ownReview)
-                    }
+                    persistOwnReview()
                     showSuccessAlert()
                 }
                 return true
@@ -83,6 +75,23 @@ class CreateReviewActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onBackPressed() {
+        persistOwnReview()
+        super.onBackPressed()
+    }
+
+    private fun persistOwnReview() {
+        val ownReview = ReviewsDatabase.getInstance(this@CreateReviewActivity).reviewsDao().getOwnReview()
+        ownReview?.let {
+            ownReview.userName = createReviewOwnName.text.toString()
+            ownReview.content = createReviewOwnContent.text.toString()
+            ownReview.createdAt = System.currentTimeMillis()
+            ownReview.rating = createReviewRating.rating.toInt()
+            ReviewsDatabase.getInstance(this@CreateReviewActivity).reviewsDao().updateReview(ownReview)
+            HittaSandbox.persistReview(ownReview)
+        }
     }
 
     private fun showSuccessAlert() {

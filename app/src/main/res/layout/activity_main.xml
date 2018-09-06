@@ -63,6 +63,16 @@
         android:layout_height="1dp"
         android:background="@color/hitta_grey" />
 
+    <TextView
+        android:id="@+id/yourReviewLbl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/default_margin"
+        android:text="@string/your_review"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
     <FrameLayout
         android:id="@+id/ownReviewContainer"
         android:layout_width="match_parent"

@@ -26,4 +26,5 @@
     <string name="alert_button_text">Okay!</string>
     <string name="from_frm_ratings">from %1$d ratings</string>
     <string name="describe_your_experience">Describe your experience</string>
+    <string name="your_review">Your review</string>
 </resources>

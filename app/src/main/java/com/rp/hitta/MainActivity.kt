@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         val ownReview: Review = reviewsViewModel.getOwnReview() ?: Initializer.getOwnDefaultReview()
         ownReviewContainer.removeAllViews()
         if (ownReview.rating == 0) {//rating 0 means own review was not yet given
+            yourReviewLbl.setVisibility(View.GONE)
             val placeholderLayout = LayoutInflater.from(this).inflate(R.layout.own_review_placeholder, ownReviewContainer, false)
             placeholderLayout.findViewById<RatingBar>(R.id.ownRating).onRatingBarChangeListener =
                     RatingBar.OnRatingBarChangeListener { _, p1, _ ->
@@ -64,6 +65,7 @@ class MainActivity : AppCompatActivity() {
                     }
             ownReviewContainer.addView(placeholderLayout)
         } else {
+            yourReviewLbl.setVisibility(View.VISIBLE)
             val ownReviewLayout = LayoutInflater.from(this).inflate(R.layout.review_item, ownReviewContainer, false)
             ReviewsAdapter.RecyclerViewHolder(ownReviewLayout).populate(ownReview, View.OnClickListener {
                 CreateReviewActivity.start(this, companyName, ownReview.rating, ownReview.userName, ownReview.content)
