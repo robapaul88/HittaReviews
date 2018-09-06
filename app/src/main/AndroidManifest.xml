@@ -19,9 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity
-            android:name=".CreateReviewActivity"
-            android:theme="@style/AppThemeToolbar" />
+        <activity android:name=".CreateReviewActivity" />
     </application>
 
 </manifest>

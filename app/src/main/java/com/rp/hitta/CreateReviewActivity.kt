@@ -3,15 +3,14 @@ package com.rp.hitta
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.RatingBar
-import android.widget.Toolbar
 import com.rp.hitta.db.ReviewsDatabase
-import com.rp.hitta.model.Review
 import kotlinx.android.synthetic.main.create_review_layout.*
-import kotlinx.android.synthetic.main.own_review_placeholder.*
 
 /**
  * Created by roba
@@ -19,57 +18,93 @@ import kotlinx.android.synthetic.main.own_review_placeholder.*
 class CreateReviewActivity : AppCompatActivity() {
     companion object {
         private const val KEY_COMPANY_NAME = "KEY_COMPANY_NAME"
-        fun start(context: Context, companyName: String) {
+        private const val KEY_INITIAL_RATING = "KEY_INITIAL_RATING"
+        private const val KEY_INITIAL_NAME = "KEY_INITIAL_NAME"
+        private const val KEY_INITIAL_CONTENT = "KEY_INITIAL_CONTENT"
+        fun start(context: Context, companyName: String, rating: Int, name: String? = "", content: String? = "") {
             val intent = Intent(context, CreateReviewActivity::class.java)
             intent.putExtra(KEY_COMPANY_NAME, companyName)
+            intent.putExtra(KEY_INITIAL_RATING, rating)
+            intent.putExtra(KEY_INITIAL_NAME, name)
+            intent.putExtra(KEY_INITIAL_CONTENT, content)
             context.startActivity(intent)
         }
     }
 
-    private lateinit var ownReview: Review
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.create_review_layout)
 
-        ownReview = ReviewsDatabase.getInstance(this@CreateReviewActivity)!!.reviewsDao().getOwnReview()!!
-        create_review_rating.rating = ownReview.rating.toFloat()
-        updateRatingLabel(ownReview.rating)
+        val initialReview = intent.getIntExtra(KEY_INITIAL_RATING, 3)
+        createReviewRating.rating = initialReview.toFloat()
+        updateRatingLabel(initialReview)
+
+        createReviewOwnName.setText(intent.getStringExtra(KEY_INITIAL_NAME))
+        createReviewOwnContent.setText(intent.getStringExtra(KEY_INITIAL_CONTENT))
 
         setSupportActionBar(toolbar)
-        toolbar.inflateMenu(R.menu.create_review_menu)
-        toolbar.setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener, android.support.v7.widget.Toolbar.OnMenuItemClickListener {
-            override fun onMenuItemClick(p0: MenuItem?): Boolean {
-                if (isValidReview()) {
-                    ownReview.userName = create_review_own_name.text.toString()
-                    ownReview.content = create_review_own_review.text.toString()
-                    ownReview.createdAt = System.currentTimeMillis()
-                    ownReview.rating = create_review_rating.rating.toInt()
-                    ReviewsDatabase.getInstance(this@CreateReviewActivity)!!.reviewsDao().updateReview(ownReview)
-                    finish()
-                }
-                return true
-            }
-        })
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayShowHomeEnabled(true)
+        supportActionBar!!.title = getString(R.string.review_frm, intent.getStringExtra(KEY_COMPANY_NAME))
 
-        own_review_rating.onRatingBarChangeListener =
+        createReviewRating.onRatingBarChangeListener =
                 RatingBar.OnRatingBarChangeListener { _, p1, _ ->
                     updateRatingLabel(p1.toInt())
                 }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.create_review_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            R.id.save_review -> {
+                if (isValidReview()) {
+                    val ownReview = ReviewsDatabase.getInstance(this@CreateReviewActivity).reviewsDao().getOwnReview()
+                    ownReview?.let {
+                        ownReview.userName = createReviewOwnName.text.toString()
+                        ownReview.content = createReviewOwnContent.text.toString()
+                        ownReview.createdAt = System.currentTimeMillis()
+                        ownReview.rating = createReviewRating.rating.toInt()
+                        ReviewsDatabase.getInstance(this@CreateReviewActivity).reviewsDao().updateReview(ownReview)
+                    }
+                    showSuccessAlert()
+                }
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    private fun showSuccessAlert() {
+        AlertDialog.Builder(this)
+                .setTitle(getString(R.string.alert_title))
+                .setMessage(getString(R.string.alert_message))
+                .setPositiveButton(getString(R.string.alert_button_text)) { _, _ -> finish() }
+                .setCancelable(false)
+                .show()
+    }
+
     private fun updateRatingLabel(rating: Int) {
         when (rating) {
-            1 -> create_review_rating_label.text = getString(R.string.rating_1_lbl)
-            2 -> create_review_rating_label.text = getString(R.string.rating_2_lbl)
-            3 -> create_review_rating_label.text = getString(R.string.rating_3_lbl)
-            4 -> create_review_rating_label.text = getString(R.string.rating_4_lbl)
-            5 -> create_review_rating_label.text = getString(R.string.rating_5_lbl)
+            1 -> createReviewRatingLabel.text = getString(R.string.rating_1_lbl)
+            2 -> createReviewRatingLabel.text = getString(R.string.rating_2_lbl)
+            3 -> createReviewRatingLabel.text = getString(R.string.rating_3_lbl)
+            4 -> createReviewRatingLabel.text = getString(R.string.rating_4_lbl)
+            5 -> createReviewRatingLabel.text = getString(R.string.rating_5_lbl)
         }
     }
 
     private fun isValidReview(): Boolean {
-        if (TextUtils.isEmpty(create_review_own_name.text.toString())) {
-            create_review_own_name.error = getString(R.string.required)
+        if (TextUtils.isEmpty(createReviewOwnName.text.toString())) {
+            createReviewOwnName.error = getString(R.string.required)
             return false
         }
         return true

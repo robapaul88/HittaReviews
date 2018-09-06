@@ -1,73 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/default_margin">
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
-
-    <RatingBar
-        android:id="@+id/create_review_rating"
-        style="@style/RatingBarLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:numStars="5"
-        android:stepSize="1"
-        tools:rating="3" />
-
-    <TextView
-        android:id="@+id/create_review_rating_label"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
         android:gravity="center"
-        android:padding="@dimen/default_margin"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:textColor="@color/hitta_grey"
-        tools:text="@string/placeholder" />
+        android:theme="@style/ToolbarTheme"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <View
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/hitta_grey" />
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/create_review_own_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:hint="@string/your_name"
-        android:inputType="text"
-        android:lines="1"
-        android:paddingBottom="@dimen/small_margin"
-        android:paddingTop="@dimen/small_margin" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/default_margin">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/hitta_grey" />
+            <RatingBar
+                android:id="@+id/createReviewRating"
+                style="@style/RatingBarLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:numStars="5"
+                android:stepSize="1"
+                tools:rating="3" />
 
-    <EditText
-        android:id="@+id/create_review_own_review"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:gravity="top"
-        android:hint="@string/add_more_details"
-        android:inputType="textMultiLine|textNoSuggestions"
-        android:minLines="3"
-        android:paddingBottom="@dimen/small_margin"
-        android:paddingTop="@dimen/small_margin"
-        android:scrollHorizontally="false" />
+            <TextView
+                android:id="@+id/createReviewRatingLabel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/default_margin"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/hitta_grey"
+                tools:text="@string/placeholder" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/hitta_grey" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/hitta_grey" />
 
+            <EditText
+                android:id="@+id/createReviewOwnName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:hint="@string/your_name"
+                android:inputType="text"
+                android:lines="1"
+                android:paddingBottom="@dimen/small_margin"
+                android:paddingTop="@dimen/small_margin" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/hitta_grey" />
+
+            <EditText
+                android:id="@+id/createReviewOwnContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:gravity="top"
+                android:hint="@string/add_more_details"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:minLines="3"
+                android:paddingBottom="@dimen/small_margin"
+                android:paddingTop="@dimen/small_margin"
+                android:scrollHorizontally="false" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/hitta_grey" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

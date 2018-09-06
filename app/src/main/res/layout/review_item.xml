@@ -10,7 +10,7 @@
         android:id="@+id/review_user_icon"
         android:layout_width="@dimen/user_icon_size"
         android:layout_height="@dimen/user_icon_size"
-        android:layout_marginStart="@dimen/default_margin"
+        android:layout_marginEnd="@dimen/default_margin"
         android:layout_marginTop="@dimen/default_margin"
         android:contentDescription="@null"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -73,6 +73,7 @@
         android:id="@+id/bottom_line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="@dimen/default_margin"
         android:background="@color/hitta_grey"
         app:layout_constraintBottom_toBottomOf="parent" />
 </android.support.constraint.ConstraintLayout>

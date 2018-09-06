@@ -8,7 +8,7 @@ import com.rp.hitta.db.ReviewsDatabase
 import com.rp.hitta.model.Review
 
 class ReviewsViewModel(application: Application) : AndroidViewModel(application) {
-    private val reviewsDao: ReviewsDao? = ReviewsDatabase.getInstance(application)!!.reviewsDao()
+    private val reviewsDao: ReviewsDao? = ReviewsDatabase.getInstance(application).reviewsDao()
     private val reviewsList: LiveData<List<Review>>
 
     init {
@@ -21,11 +21,5 @@ class ReviewsViewModel(application: Application) : AndroidViewModel(application)
 
     fun getOwnReview(): Review? {
         return reviewsDao!!.getOwnReview()
-    }
-
-    fun insert(vararg reviews: Review) {
-        for (review in reviews) {
-            reviewsDao!!.insertReview(review)
-        }
     }
 }

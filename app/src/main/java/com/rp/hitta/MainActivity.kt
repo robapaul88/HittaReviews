@@ -1,6 +1,7 @@
 package com.rp.hitta
 
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -9,10 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.RatingBar
 import com.rp.hitta.api.ReviewsViewModel
-import com.rp.hitta.db.ReviewsDatabase
 import com.rp.hitta.init.Initializer
 import com.rp.hitta.model.Review
 import com.rp.hitta.ui.ReviewsAdapter
+import com.rp.hitta.util.ViewUtils
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -35,13 +36,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         companyName = intent.getStringExtra(KEY_COMPANY_NAME)
-        companyName.let { company_name.text = it }
+        companyName.let { companyNameTv.text = it }
 
         val adapter = ReviewsAdapter()
         reviewsRecyclerView.adapter = adapter
 
         reviewsViewModel = ViewModelProviders.of(this).get(ReviewsViewModel::class.java)
         reviewsViewModel.getReviewsList().observe(this, Observer<List<Review>> {
+            ViewUtils.updateCompanyStats(reviewsCompanyRating, reviewsFromRatings, it)
             adapter.updateReviews(it)
         })
     }
@@ -53,20 +55,20 @@ class MainActivity : AppCompatActivity() {
 
     private fun refreshOwnReview() {
         val ownReview: Review = reviewsViewModel.getOwnReview() ?: Initializer.getOwnDefaultReview()
-        if (ownReview.rating == 0) {
-            val ownReviewLayout = LayoutInflater.from(this).inflate(R.layout.own_review_placeholder, own_review_container, false)
-            ownReviewLayout.findViewById<RatingBar>(R.id.own_review_rating).onRatingBarChangeListener =
+        ownReviewContainer.removeAllViews()
+        if (ownReview.rating == 0) {//rating 0 means own review was not yet given
+            val placeholderLayout = LayoutInflater.from(this).inflate(R.layout.own_review_placeholder, ownReviewContainer, false)
+            placeholderLayout.findViewById<RatingBar>(R.id.ownRating).onRatingBarChangeListener =
                     RatingBar.OnRatingBarChangeListener { _, p1, _ ->
-                        ownReview.rating = p1.toInt()
-                        ReviewsDatabase.getInstance(this@MainActivity)!!.reviewsDao().updateReview(ownReview)
-                        CreateReviewActivity.start(this@MainActivity, companyName)
+                        CreateReviewActivity.start(this@MainActivity, companyName, p1.toInt())
                     }
-            own_review_container.addView(ownReviewLayout)
+            ownReviewContainer.addView(placeholderLayout)
         } else {
-            val ownReviewLayout = LayoutInflater.from(this).inflate(R.layout.review_item, own_review_container, false)
-            ReviewsAdapter.RecyclerViewHolder(ownReviewLayout).populate(ownReview,
-                    View.OnClickListener { CreateReviewActivity.start(this, companyName) })
-            own_review_container.addView(ownReviewLayout)
+            val ownReviewLayout = LayoutInflater.from(this).inflate(R.layout.review_item, ownReviewContainer, false)
+            ReviewsAdapter.RecyclerViewHolder(ownReviewLayout).populate(ownReview, View.OnClickListener {
+                CreateReviewActivity.start(this, companyName, ownReview.rating, ownReview.userName, ownReview.content)
+            })
+            ownReviewContainer.addView(ownReviewLayout)
         }
     }
 }

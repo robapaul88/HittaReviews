@@ -11,7 +11,7 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/company_name"
+        android:id="@+id/companyNameTv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/reviews_title"
@@ -27,27 +27,29 @@
         android:paddingTop="@dimen/default_margin">
 
         <TextView
-            android:id="@+id/reviews_company_rating_tv"
+            android:id="@+id/reviewsCompanyRating"
             android:layout_width="@dimen/user_icon_size"
             android:layout_height="@dimen/user_icon_size"
             android:background="@drawable/bg_rounded_yellow"
             android:gravity="center"
+            android:text="@string/placeholder"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textStyle="bold"
             tools:text="4.1" />
 
         <TextView
-            android:id="@+id/reviews_company_from_ratings_tv"
+            android:id="@+id/reviewsFromRatings"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_weight="1"
+            android:text="@string/placeholder"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/hitta_grey"
-            tools:text="from 27 ratings" />
+            tools:text="@string/from_frm_ratings" />
 
         <TextView
-            android:id="@+id/reviews_show_all_tv1"
+            android:id="@+id/reviewsShowAll1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/default_margin"
@@ -62,14 +64,9 @@
         android:background="@color/hitta_grey" />
 
     <FrameLayout
-        android:id="@+id/own_review_container"
+        android:id="@+id/ownReviewContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/hitta_grey" />
 
     <TextView
         android:layout_width="match_parent"
@@ -88,9 +85,10 @@
         app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
     <TextView
-        android:id="@+id/reviews_show_all_tv2"
+        android:id="@+id/reviewsShowAll2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:drawable/list_selector_background"
         android:gravity="center"
         android:padding="@dimen/default_margin"
         android:text="@string/view_all_reviews"

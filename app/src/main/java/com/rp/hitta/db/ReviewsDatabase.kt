@@ -12,32 +12,31 @@ import java.util.concurrent.Executors
 /**
  * Created by roba
  */
-@Database(entities = arrayOf(Review::class), version = 1)
+@Database(entities = arrayOf(Review::class), version = 1, exportSchema = false)
 abstract class ReviewsDatabase : RoomDatabase() {
     abstract fun reviewsDao(): ReviewsDao
 
     companion object {
-        private var INSTANCE: ReviewsDatabase? = null
+        private var sInstance: ReviewsDatabase? = null
 
-        fun getInstance(context: Context): ReviewsDatabase? {
-            if (INSTANCE == null) {
-                synchronized(ReviewsDatabase::class) {
-                    INSTANCE = Room.databaseBuilder(context.applicationContext, ReviewsDatabase::class.java, "hitta_reviews.db")
-                            .allowMainThreadQueries()
-                            .addCallback(object : RoomDatabase.Callback() {
-                                override fun onCreate(db: SupportSQLiteDatabase) {
-                                    super.onCreate(db)
-                                    Executors.newSingleThreadScheduledExecutor().execute {
-                                        for (review in Initializer.getInitialReviews()) {
-                                            ReviewsDatabase.getInstance(context)?.reviewsDao()?.insertReview(review)
-                                        }
+        @Synchronized
+        fun getInstance(context: Context): ReviewsDatabase {
+            if (sInstance == null) {
+                sInstance = Room.databaseBuilder(context.applicationContext, ReviewsDatabase::class.java, "hitta_reviews.db")
+                        .allowMainThreadQueries()
+                        .addCallback(object : RoomDatabase.Callback() {
+                            override fun onCreate(db: SupportSQLiteDatabase) {
+                                super.onCreate(db)
+                                Executors.newSingleThreadScheduledExecutor().execute {
+                                    for (review in Initializer.getInitialReviews()) {
+                                        ReviewsDatabase.getInstance(context).reviewsDao().insertReview(review)
                                     }
                                 }
-                            })
-                            .build()
-                }
+                            }
+                        })
+                        .build()
             }
-            return INSTANCE
+            return sInstance!!
         }
     }
 }

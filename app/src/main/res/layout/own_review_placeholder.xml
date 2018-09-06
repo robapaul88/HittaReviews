@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="match_parent">
 
     <ImageView
-        android:id="@+id/own_review_icon"
+        android:id="@+id/ownIcon"
         android:layout_width="@dimen/user_icon_size"
         android:layout_height="@dimen/user_icon_size"
         android:contentDescription="@null"
@@ -19,7 +18,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/default_margin"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/review_user_icon"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="match_parent"
@@ -35,7 +37,7 @@
             android:textColor="@color/hitta_grey" />
 
         <RatingBar
-            android:id="@+id/own_review_rating"
+            android:id="@+id/ownRating"
             style="@style/RatingBarLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,4 +45,11 @@
             android:stepSize="1"
             tools:rating="3" />
     </LinearLayout>
-</LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/default_margin"
+        android:background="@color/hitta_grey"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</android.support.design.widget.CoordinatorLayout>

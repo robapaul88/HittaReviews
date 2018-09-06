@@ -9,10 +9,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.choota.dev.ctimeago.TimeAgo
 import com.rp.hitta.R
 import com.rp.hitta.model.Review
+import com.rp.hitta.util.ViewUtils
 import java.util.*
 
 /**
@@ -49,15 +49,17 @@ class ReviewsAdapter : RecyclerView.Adapter<ReviewsAdapter.RecyclerViewHolder>()
 
         fun populate(review: Review, clickListener: View.OnClickListener?) {
             val context = userIcon.context
-            Glide.with(context).load(review.avatar).into(userIcon)
-            userName.text = review.userName
+            ViewUtils.loadImage(userIcon, review.avatar)
+            userName.text = if (TextUtils.isEmpty(review.userName)) context.getString(R.string.default_user_name) else review.userName
             ratingBar.rating = review.rating.toFloat()
-            reviewContent.text = review.content
-            reviewTimeAndPlace.text = context.getString(R.string.concat_w_dash_frm, TimeAgo().getTimeAgo(Date(review.createdAt)), review.source)
+            val timeAgo = TimeAgo().locale(context).getTimeAgo(Date(review.createdAt))
+            reviewTimeAndPlace.text = context.getString(R.string.concat_w_dash_frm, timeAgo, review.source)
             reviewContent.setOnClickListener(clickListener)
             if (review.isCurrentUser == 1 && TextUtils.isEmpty(review.content)) {
+                reviewContent.setText(R.string.describe_your_experience)
                 reviewContent.setTextColor(ContextCompat.getColor(context, R.color.hitta_blue))
             } else {
+                reviewContent.text = review.content
                 reviewContent.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
             }
         }
