@@ -5,14 +5,14 @@ import android.arch.persistence.room.Database
 import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.content.Context
-import com.rp.hitta.mock.MockData
+import com.rp.hitta.init.Initializer
 import com.rp.hitta.model.Review
 import java.util.concurrent.Executors
 
 /**
  * Created by roba
  */
-@Database(entities = [Review::class], version = 1, exportSchema = false)
+@Database(entities = arrayOf(Review::class), version = 1)
 abstract class ReviewsDatabase : RoomDatabase() {
     abstract fun reviewsDao(): ReviewsDao
 
@@ -28,7 +28,7 @@ abstract class ReviewsDatabase : RoomDatabase() {
                                 override fun onCreate(db: SupportSQLiteDatabase) {
                                     super.onCreate(db)
                                     Executors.newSingleThreadScheduledExecutor().execute {
-                                        for (review in MockData.getInitialReviews()) {
+                                        for (review in Initializer.getInitialReviews()) {
                                             ReviewsDatabase.getInstance(context)?.reviewsDao()?.insertReview(review)
                                         }
                                     }

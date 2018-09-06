@@ -19,6 +19,10 @@ class ReviewsViewModel(application: Application) : AndroidViewModel(application)
         return reviewsList
     }
 
+    fun getOwnReview(): Review? {
+        return reviewsDao!!.getOwnReview()
+    }
+
     fun insert(vararg reviews: Review) {
         for (review in reviews) {
             reviewsDao!!.insertReview(review)

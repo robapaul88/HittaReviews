@@ -1,4 +1,4 @@
-package com.rp.hitta.mock
+package com.rp.hitta.init
 
 import android.text.format.DateUtils
 import com.rp.hitta.model.Review
@@ -7,10 +7,21 @@ import java.util.*
 /**
  * Created by roba
  */
-class MockData {
+class Initializer {
     companion object {
+        fun getOwnDefaultReview(): Review {
+            return Review("",
+                    "",
+                    0,
+                    0,
+                    "hitta.se",
+                    "",
+                    1)
+        }
+
         fun getInitialReviews(): List<Review> {
             return Arrays.asList(
+                    getOwnDefaultReview(),
                     Review("",
                             "",
                             System.currentTimeMillis() - 12 * DateUtils.HOUR_IN_MILLIS,

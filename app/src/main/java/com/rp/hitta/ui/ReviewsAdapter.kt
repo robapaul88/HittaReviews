@@ -1,6 +1,8 @@
 package com.rp.hitta.ui
 
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,12 +27,7 @@ class ReviewsAdapter : RecyclerView.Adapter<ReviewsAdapter.RecyclerViewHolder>()
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
         val review = reviewsList[position]
-        val context = holder.userIcon.context
-        Glide.with(context).load(review.avatar).into(holder.userIcon)
-        holder.userName.text = review.userName
-        holder.ratingBar.rating = review.rating.toFloat()
-        holder.reviewContent.text = review.content
-        holder.reviewTimeAndPlace.text = context.getString(R.string.concat_w_dash_frm, TimeAgo().getTimeAgo(Date(review.createdAt)), review.source)
+        holder.populate(review, null)
     }
 
     override fun getItemCount(): Int {
@@ -44,10 +41,25 @@ class ReviewsAdapter : RecyclerView.Adapter<ReviewsAdapter.RecyclerViewHolder>()
     }
 
     class RecyclerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val userIcon: ImageView = view.findViewById(R.id.review_user_icon)
-        val userName: TextView = view.findViewById(R.id.review_user_name)
-        val ratingBar: RatingBar = view.findViewById(R.id.review_rating)
-        val reviewTimeAndPlace: TextView = view.findViewById(R.id.review_time_and_place)
-        val reviewContent: TextView = view.findViewById(R.id.review_content)
+        private val userIcon: ImageView = view.findViewById(R.id.review_user_icon)
+        private val userName: TextView = view.findViewById(R.id.review_user_name)
+        private val ratingBar: RatingBar = view.findViewById(R.id.review_rating)
+        private val reviewTimeAndPlace: TextView = view.findViewById(R.id.review_time_and_place)
+        private val reviewContent: TextView = view.findViewById(R.id.review_content)
+
+        fun populate(review: Review, clickListener: View.OnClickListener?) {
+            val context = userIcon.context
+            Glide.with(context).load(review.avatar).into(userIcon)
+            userName.text = review.userName
+            ratingBar.rating = review.rating.toFloat()
+            reviewContent.text = review.content
+            reviewTimeAndPlace.text = context.getString(R.string.concat_w_dash_frm, TimeAgo().getTimeAgo(Date(review.createdAt)), review.source)
+            reviewContent.setOnClickListener(clickListener)
+            if (review.isCurrentUser == 1 && TextUtils.isEmpty(review.content)) {
+                reviewContent.setTextColor(ContextCompat.getColor(context, R.color.hitta_blue))
+            } else {
+                reviewContent.setTextColor(ContextCompat.getColor(context, R.color.textColorPrimary))
+            }
+        }
     }
 }

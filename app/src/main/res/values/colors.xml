@@ -10,4 +10,5 @@
     <color name="splash_text">#ffffff</color>
     <color name="hitta_grey">#CCCCCC</color>
     <color name="hitta_blue">#0094EE</color>
+    <color name="black">#000000</color>
 </resources>
