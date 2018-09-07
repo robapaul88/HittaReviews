@@ -16,6 +16,7 @@ class ViewUtils {
     companion object {
         fun loadImage(targeImv: ImageView, url: String?) {
             val requestOptions = RequestOptions()
+            requestOptions.circleCrop()
             requestOptions.placeholder(R.drawable.ic_account_unknown)
             requestOptions.error(R.drawable.ic_account_unknown)
             Glide.with(targeImv.context).setDefaultRequestOptions(requestOptions).load(url).into(targeImv)
